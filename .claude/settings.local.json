@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node:*)",
+      "Bash(npm run create-user:*)",
+      "Bash(cat:*)",
+      "Bash(curl:*)",
+      "Bash(dir /s /b \"C:\\Users\\User\\Desktop\\collaborative-editor-complete\\frontend\\src\\*.js\" \"C:\\Users\\User\\Desktop\\collaborative-editor-complete\\frontend\\src\\*.jsx\")",
+      "Bash(dir /s /b \"C:\\Users\\User\\Desktop\\collaborative-editor-complete\\frontend\\src\")",
+      "Bash(npm install:*)",
+      "Bash(npm run build:*)",
+      "Bash(findstr:*)",
+      "Bash(dir \"C:\\Users\\User\\Desktop\\collaborative-editor-complete\\*.md\" /b)"
+    ]
+  }
+}

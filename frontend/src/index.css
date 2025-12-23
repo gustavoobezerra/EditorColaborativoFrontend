@@ -1,0 +1,310 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  @apply transition-colors duration-300;
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Quill Editor Styles - Clean & Integrated */
+.quill {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border: none !important;
+}
+
+/* Toolbar minimalista e integrada */
+.ql-toolbar.ql-snow {
+  border: none !important;
+  border-bottom: 1px solid #f0f0f0 !important;
+  background: transparent;
+  padding: 8px 16px !important;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: white;
+  opacity: 0.7;
+  transition: opacity 0.2s, background-color 0.3s;
+}
+
+.dark .ql-toolbar.ql-snow {
+  background-color: #1e293b;
+  border-bottom-color: #334155 !important;
+}
+
+/* Ao passar o mouse, a toolbar fica totalmente visível */
+.ql-toolbar.ql-snow:hover {
+  opacity: 1;
+}
+
+/* Container do editor sem bordas */
+.ql-container.ql-snow {
+  border: none !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+/* Editor scroll suave */
+.ql-editor {
+  overflow-y: visible !important;
+  height: auto !important;
+  min-height: 500px;
+  padding: 3rem 5% !important;
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+.ql-editor.ql-blank::before {
+  font-style: normal;
+  color: #94a3b8;
+  left: 5% !important;
+}
+
+/* Dark mode toolbar */
+.dark .ql-toolbar button,
+.dark .ql-toolbar .ql-picker-label {
+  color: #cbd5e1;
+}
+
+.dark .ql-toolbar button:hover,
+.dark .ql-toolbar .ql-picker-label:hover {
+  color: #fff;
+  background: #334155;
+}
+
+.dark .ql-toolbar button.ql-active,
+.dark .ql-toolbar .ql-picker-label.ql-active {
+  color: #6366f1;
+}
+
+.dark .ql-toolbar .ql-stroke {
+  stroke: #cbd5e1;
+}
+
+.dark .ql-toolbar .ql-fill {
+  fill: #cbd5e1;
+}
+
+.dark .ql-toolbar button:hover .ql-stroke,
+.dark .ql-toolbar button.ql-active .ql-stroke {
+  stroke: #6366f1;
+}
+
+.dark .ql-toolbar button:hover .ql-fill,
+.dark .ql-toolbar button.ql-active .ql-fill {
+  fill: #6366f1;
+}
+
+.dark .ql-editor {
+  color: #f3f4f6;
+}
+
+.dark .ql-editor.ql-blank::before {
+  color: #6b7280;
+}
+
+.dark .ql-picker-options {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+.dark .ql-picker-item {
+  color: #d1d5db;
+}
+
+.dark .ql-picker-item:hover {
+  color: #fff;
+}
+
+/* Quill Toolbar Icons - Minimalista */
+.ql-toolbar button {
+  padding: 4px 8px !important;
+  border-radius: 6px !important;
+  transition: all 0.15s ease;
+}
+
+.ql-toolbar button:hover {
+  background: #f1f5f9;
+  transform: scale(1.05);
+}
+
+.dark .ql-toolbar button:hover {
+  background: #334155;
+}
+
+/* Code Block */
+.ql-editor pre.ql-syntax {
+  background: #1e293b;
+  color: #e2e8f0;
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+  font-size: 14px;
+  overflow-x: auto;
+}
+
+/* Blockquote */
+.ql-editor blockquote {
+  border-left: 4px solid #3b82f6;
+  padding-left: 1rem;
+  margin: 1rem 0;
+  color: #6b7280;
+}
+
+.dark .ql-editor blockquote {
+  color: #9ca3af;
+}
+
+/* Lists */
+.ql-editor ul,
+.ql-editor ol {
+  padding-left: 1.5rem;
+}
+
+/* Links */
+.ql-editor a {
+  color: #3b82f6;
+  text-decoration: underline;
+}
+
+.ql-editor a:hover {
+  color: #2563eb;
+}
+
+/* Images */
+.ql-editor img {
+  max-width: 100%;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+/* Headings */
+.ql-editor h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.ql-editor h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.ql-editor h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* Selection */
+::selection {
+  background: #3b82f6;
+  color: white;
+}
+
+/* Focus outline */
+*:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Smooth Transitions for Theme Switching */
+* {
+  transition-property: background-color, border-color, color, fill, stroke, box-shadow;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+}
+
+/* Prose Styling for Editor */
+.prose-editor {
+  @apply prose prose-lg max-w-none;
+  @apply prose-slate dark:prose-invert;
+  line-height: 1.75;
+}
+
+.prose-editor p {
+  @apply text-slate-700 dark:text-slate-300;
+}
+
+.prose-editor h1, .prose-editor h2, .prose-editor h3 {
+  @apply bg-gradient-primary bg-clip-text text-transparent;
+  font-weight: 700;
+}
+
+/* Magic Moments - Gradient Text */
+.text-magic {
+  @apply bg-gradient-primary bg-clip-text text-transparent;
+}
+
+/* Print styles */
+@media print {
+  .ql-toolbar {
+    display: none !important;
+  }
+
+  .ql-editor {
+    padding: 0 !important;
+  }
+}
