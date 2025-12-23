@@ -1,9 +1,5 @@
 # Feito por Gustavo Bezerra
-# Configuração de deploy para Render.com - Editor Colaborativo
-# Este arquivo deve ficar na RAIZ do repositório
-
 services:
-  # Backend - Node.js + Express + Socket.IO
   - type: web
     name: smarteditor-backend
     runtime: node
@@ -17,15 +13,14 @@ services:
       - key: PORT
         value: 10000
       - key: MONGODB_URI
-        sync: false  # Configurar manualmente no Dashboard
+        sync: false
       - key: JWT_SECRET
-        generateValue: true  # Render gera automaticamente
+        generateValue: true
       - key: JWT_EXPIRE
         value: 7d
       - key: CORS_ORIGIN
-        sync: false  # Configurar com URL do frontend após deploy
+        sync: false
 
-  # Frontend - React/Vite (Static Site)
   - type: web
     name: smarteditor-frontend
     runtime: static
@@ -34,13 +29,9 @@ services:
     staticPublishPath: dist
     envVars:
       - key: VITE_API_URL
-        sync: false  # Configurar com URL do backend após deploy
+        sync: false
       - key: VITE_SOCKET_URL
-        sync: false  # Mesmo valor que VITE_API_URL
-      - key: VITE_GEMINI_API_KEY
-        sync: false  # Opcional - para funcionalidades de IA
-      - key: VITE_USE_MOCK_AI
-        value: "true"  # Usar mock por padrão
+        sync: false
     routes:
       - type: rewrite
         source: /*
