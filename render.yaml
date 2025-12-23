@@ -3,6 +3,7 @@ services:
   - type: web
     name: smarteditor-backend
     runtime: node
+    plan: free
     rootDir: backend
     buildCommand: npm install
     startCommand: npm start
