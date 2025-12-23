@@ -156,86 +156,7 @@ Caso precise resetar ou configurar o banco de dados manualmente:
 
 ---
 
-## 🧪 Testando as Novas Funcionalidades
 
-### Teste 1: Modo Offline
-```bash
-1. Abra um documento no editor
-2. DevTools → Network → Offline
-3. Edite o documento normalmente
-4. Observe: "Offline mode - changes saved locally"
-5. Volte online
-6. Mudanças sincronizam automaticamente ✅
-```
-
-### Teste 2: Performance
-```bash
-1. Crie 100+ documentos
-2. Digite rapidamente na busca
-3. Observe: sem lag, resultado após parar de digitar ✅
-```
-
-**📖 Guia Completo:** Veja `QUICK_START_GUIDE.md` para testes detalhados
-
----
-
-## 📊 Progresso das Melhorias Estratégicas
-
-| # | Melhoria | Status | Descrição |
-|---|----------|--------|-----------|
-| 1 | Modo Offline (CRDT) | ✅ **COMPLETO** | Yjs + IndexedDB + WebSocket sync |
-| 2 | Performance Ultra-Rápida | ✅ **COMPLETO** | Debouncing + Lazy Loading + Hooks |
-| 3 | IA Contextual | 🔨 Pendente | Debouncing de sugestões AI |
-| 4 | Comentários com Threads | 🔨 Pendente | Sistema de discussão inline |
-| 5 | Templates | 🔨 Pendente | Galeria de templates reutilizáveis |
-| 6 | Busca Avançada | 🔨 Pendente | Full-text search + preview |
-| 7 | Exportação Multi-Formato | 🔨 Pendente | PDF, DOCX, Markdown |
-| 8 | Permissões Granulares | 🔨 Pendente | CASL + auditoria |
-| 9 | Webhooks | 🔨 Pendente | Integrações externas |
-| 10 | Analytics Dashboard | 🔨 Pendente | Métricas de produtividade |
-
-**Progresso:** 2/10 (20%) | **Próximo:** Templates (4-6h)
-
-**📋 Roadmap Completo:** Veja `IMPLEMENTATION_ROADMAP.md`
-
----
-
-## 📚 Documentação
-
-- **`IMPLEMENTATION_ROADMAP.md`** - Guia passo-a-passo das 8 melhorias restantes com código de exemplo
-- **`IMPROVEMENTS_SUMMARY.md`** - Resumo técnico detalhado das melhorias implementadas
-- **`QUICK_START_GUIDE.md`** - Testes, troubleshooting e guia de uso completo
-
----
-
-## ❓ Troubleshooting
-
-**Erro de Conexão com MongoDB:**
-- Verifique se a URI no arquivo `backend/.env` está correta
-- Se usar MongoDB Atlas, garanta que seu IP está na whitelist
-- Certifique-se de que o serviço do MongoDB está rodando (`mongod`)
-
-**Problemas de Login:**
-- Se o login falhar, verifique se o usuário existe no banco
-- Execute `npm run create-user` no backend para recriar o usuário de teste
-- Verifique se o `JWT_SECRET` está configurado no `.env`
-
-**Modo Offline não funciona:**
-- Verifique console: deve aparecer "IndexedDB synced"
-- Limpe IndexedDB: DevTools → Application → IndexedDB → Delete
-- Reload da página
-
-**Mais ajuda:** Consulte `QUICK_START_GUIDE.md` seção Troubleshooting
-
----
-
-## 🚀 Próximos Passos
-
-1. Implementar **Templates** (Quick Win - 4-6h)
-2. Adicionar **Exportação PDF/DOCX** (4-5h)
-3. Otimizar **IA Contextual** com debouncing (2-3h)
-
-Consulte `IMPLEMENTATION_ROADMAP.md` para instruções completas!
 
 ---
 
@@ -248,7 +169,7 @@ Este projeto está sob a licença MIT.
 ## 👥 Autores
 
 **Desenvolvimento Original:** Gustavo de Oliveira Bezerra
-**Melhorias Estratégicas (v2.0):** Claude Code (Anthropic) + Engenharia de Software Avançada
+
 
 **Versão:** 2.0 (com Offline Sync + Performance)
 **Última Atualização:** 2025-12-23
