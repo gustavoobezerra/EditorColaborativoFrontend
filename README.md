@@ -51,6 +51,7 @@ Um editor de texto moderno e colaborativo, permitindo que múltiplos usuários e
    ```bash
    cd frontend
    npm install
+   cp .env.example .env
    npm run dev
    ```
    > A aplicação abrirá em `http://localhost:5173`
