@@ -7,7 +7,13 @@ import helmet from 'helmet';
 import connectDB from './config/database.js';
 import authRoutes from './routes/authRoutes.js';
 import documentRoutes from './routes/documentRoutes.js';
+import templateRoutes from './routes/templateRoutes.js';
+import commentRoutes from './routes/commentRoutes.js';
+import webhookRoutes from './routes/webhookRoutes.js';
+import analyticsRoutes from './routes/analyticsRoutes.js';
 import { setupSocket } from './socket/documentSocket.js';
+import swaggerUi from 'swagger-ui-express';
+import swaggerJsdoc from 'swagger-jsdoc';
 
 // Configurações
 dotenv.config();
@@ -98,8 +104,49 @@ app.get('/', (req, res) => {
   });
 });
 
+// Swagger configuration
+const swaggerOptions = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'CollabDocs API',
+      version: '1.0.0',
+      description: 'API de documentos colaborativos em tempo real com webhooks e analytics',
+      contact: {
+        name: 'CollabDocs Team'
+      }
+    },
+    servers: [
+      {
+        url: `http://localhost:${process.env.PORT || 5000}`,
+        description: 'Servidor de desenvolvimento'
+      }
+    ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT'
+        }
+      }
+    },
+    security: [{
+      bearerAuth: []
+    }]
+  },
+  apis: ['./src/routes/*.js']
+};
+
+const swaggerSpec = swaggerJsdoc(swaggerOptions);
+
 app.use('/api/auth', authRoutes);
 app.use('/api/documents', documentRoutes);
+app.use('/api/templates', templateRoutes);
+app.use('/api/comments', commentRoutes);
+app.use('/api/webhooks', webhookRoutes);
+app.use('/api/analytics', analyticsRoutes);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Configurar Socket.IO
 setupSocket(io);

@@ -8,6 +8,7 @@ import {
   Moon, Sun, Sparkles, MessageCircle
 } from 'lucide-react';
 import socketService from '../services/socket';
+import offlineSyncService from '../services/offlineSync';
 import {
   getDocument, updateDocument, generateShareLink, disableShareLink,
   addCollaborator, removeCollaborator, getVersions, restoreVersion, toggleStar
@@ -20,6 +21,9 @@ import AIChatPanel from '../components/AIChatPanel';
 import SavingIndicator from '../components/SavingIndicator';
 import SmartLayout from '../components/SmartLayout';
 import GhostTextCompletion from '../components/GhostTextCompletion';
+import OfflineStatusIndicator from '../components/OfflineStatusIndicator';
+import ExportMenu from '../components/ExportMenu';
+import SaveAsTemplateModal from '../components/SaveAsTemplateModal';
 
 const SAVE_INTERVAL = 2000;
 const TOOLBAR_OPTIONS = [
@@ -55,6 +59,15 @@ export default function Editor() {
   const [showAIPanel, setShowAIPanel] = useState(false);
   const [savingStatus, setSavingStatus] = useState('idle'); // idle, saving, saved, error
   const [ghostTextEnabled, setGhostTextEnabled] = useState(false); // AI Typing
+  const [showExportMenu, setShowExportMenu] = useState(false);
+  const [showSaveAsTemplateModal, setShowSaveAsTemplateModal] = useState(false);
+
+  // Estados para offline sync
+  const [offlineStatus, setOfflineStatus] = useState({
+    online: navigator.onLine,
+    synced: false,
+    message: 'Initializing...'
+  });
 
   const user = useAuthStore((state) => state.user);
   const { theme, toggleTheme } = useThemeStore();
@@ -83,62 +96,100 @@ export default function Editor() {
     };
   }, []); // Apenas na montagem inicial
 
-  // Conectar ao Socket e carregar documento
+  // Inicializar Offline Sync com Yjs
   useEffect(() => {
     if (!quill || !user) return;
 
-    let documentLoaded = false;
+    const wsUrl = import.meta.env.VITE_SOCKET_URL || 'ws://localhost:5000';
 
-    socketService.connect();
-    socketService.joinDocument(id, user);
+    // Initialize offline sync service
+    const initOfflineSync = async () => {
+      try {
+        // Subscribe to status changes
+        const unsubscribe = offlineSyncService.onStatusChange((status) => {
+          setOfflineStatus(status);
+        });
 
-    socketService.on('load-document', (content) => {
-      documentLoaded = true;
-      quill.setContents(content);
-      quill.enable();
-    });
+        // Initialize Yjs with Quill
+        await offlineSyncService.initialize(id, quill, user, wsUrl);
 
-    socketService.on('receive-changes', (delta) => {
-      quill.updateContents(delta);
-    });
+        console.log('✅ Offline sync initialized with Yjs');
 
-    socketService.on('users-update', (users) => {
-      setActiveUsers(users);
-    });
+        return () => {
+          unsubscribe();
+          offlineSyncService.destroy();
+        };
+      } catch (error) {
+        console.error('❌ Failed to initialize offline sync:', error);
+        // Fallback to standard socket sync if Yjs fails
+        initSocketSync();
+      }
+    };
+
+    // Fallback to original socket implementation
+    const initSocketSync = () => {
+      let documentLoaded = false;
+
+      socketService.connect();
+      socketService.joinDocument(id, user);
+
+      socketService.on('load-document', (content) => {
+        documentLoaded = true;
+        quill.setContents(content);
+        quill.enable();
+      });
+
+      socketService.on('receive-changes', (delta) => {
+        quill.updateContents(delta);
+      });
+
+      socketService.on('users-update', (users) => {
+        setActiveUsers(users);
+      });
+
+      // Fallback timer
+      const fallbackTimer = setTimeout(() => {
+        if (!documentLoaded && quill) {
+          console.log('Fallback: Enabling editor without socket');
+          quill.setText('');
+          quill.enable();
+        }
+      }, 3000);
+
+      return () => {
+        clearTimeout(fallbackTimer);
+        socketService.leaveDocument(id);
+        socketService.off('load-document');
+        socketService.off('receive-changes');
+        socketService.off('users-update');
+      };
+    };
 
     // Carregar dados do documento via API
     loadDocumentData();
 
-    // Fallback: Se após 3s não carregou via socket, habilita editor
-    const fallbackTimer = setTimeout(() => {
-      if (!documentLoaded && quill) {
-        console.log('Fallback: Habilitando editor sem socket');
-        quill.setText(''); // Limpa "Carregando..."
-        quill.enable();
-      }
-    }, 3000);
+    // Try offline sync first, with socket fallback
+    const cleanup = initOfflineSync();
 
     return () => {
-      clearTimeout(fallbackTimer);
-      socketService.leaveDocument(id);
-      socketService.off('load-document');
-      socketService.off('receive-changes');
-      socketService.off('users-update');
+      if (cleanup && typeof cleanup.then === 'function') {
+        cleanup.then(fn => fn && fn());
+      }
     };
   }, [quill, user, id]);
 
-  // Enviar mudanças
-  useEffect(() => {
-    if (!quill) return;
-
-    const handler = (delta, oldDelta, source) => {
-      if (source !== 'user') return;
-      socketService.sendChanges(id, delta);
-    };
-
-    quill.on('text-change', handler);
-    return () => quill.off('text-change', handler);
-  }, [quill, id]);
+  // Enviar mudanças (disabled when using Yjs - Yjs handles this automatically)
+  // useEffect(() => {
+  //   if (!quill) return;
+  //
+  //   const handler = (delta, oldDelta, source) => {
+  //     if (source !== 'user') return;
+  //     socketService.sendChanges(id, delta);
+  //   };
+  //
+  //   quill.on('text-change', handler);
+  //   return () => quill.off('text-change', handler);
+  // }, [quill, id]);
 
   // Auto-save com status visual
   useEffect(() => {
@@ -322,6 +373,8 @@ export default function Editor() {
         savingStatus={savingStatus}
         isDarkMode={theme === 'dark'}
         onToggleDarkMode={toggleTheme}
+        onExport={() => setShowExportMenu(true)}
+        onSaveAsTemplate={() => setShowSaveAsTemplateModal(true)}
       >
         {/* Quill Editor dentro do SmartLayout */}
         <div
@@ -349,6 +402,9 @@ export default function Editor() {
           onToggle={() => setGhostTextEnabled(!ghostTextEnabled)}
         />
       </SmartLayout>
+
+      {/* Offline Status Indicator - Shows connection and sync status */}
+      <OfflineStatusIndicator status={offlineStatus} />
 
       {/* Share Modal */}
       {showShareModal && (
@@ -544,6 +600,25 @@ export default function Editor() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Export Menu Modal */}
+      {showExportMenu && quill && (
+        <ExportMenu
+          title={title}
+          quillInstance={quill}
+          onClose={() => setShowExportMenu(false)}
+        />
+      )}
+
+      {/* Save As Template Modal */}
+      {showSaveAsTemplateModal && quill && (
+        <SaveAsTemplateModal
+          documentId={id}
+          title={title}
+          quillInstance={quill}
+          onClose={() => setShowSaveAsTemplateModal(false)}
+        />
       )}
     </div>
   );

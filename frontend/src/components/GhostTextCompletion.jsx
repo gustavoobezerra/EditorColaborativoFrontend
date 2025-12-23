@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { Zap, Loader2 } from 'lucide-react';
+import { Zap, Loader2, X } from 'lucide-react';
 import geminiService from '../services/gemini';
+import { useDebounce } from '../hooks/useDebounce';
 
 /**
  * GhostTextCompletion - Autocompletar inline estilo GitHub Copilot

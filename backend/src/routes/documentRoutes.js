@@ -16,6 +16,7 @@ import {
   toggleStar
 } from '../controllers/documentController.js';
 import { protect, optionalAuth } from '../middleware/auth.js';
+import { authorize } from '../middleware/authorize.js';
 
 const router = express.Router();
 
@@ -30,24 +31,24 @@ router.route('/')
   .post(createDocument);
 
 router.route('/:id')
-  .get(getDocument)
-  .put(updateDocument)
-  .delete(deleteDocument);
+  .get(authorize('read'), getDocument)
+  .put(authorize('update'), updateDocument)
+  .delete(authorize('delete'), deleteDocument);
 
 // Compartilhamento
-router.post('/:id/share', generateShareLink);
-router.delete('/:id/share', disableShareLink);
+router.post('/:id/share', authorize('share'), generateShareLink);
+router.delete('/:id/share', authorize('share'), disableShareLink);
 
 // Colaboradores
-router.post('/:id/collaborators', addCollaborator);
-router.delete('/:id/collaborators/:userId', removeCollaborator);
+router.post('/:id/collaborators', authorize('share'), addCollaborator);
+router.delete('/:id/collaborators/:userId', authorize('share'), removeCollaborator);
 
 // Versões
-router.get('/:id/versions', getVersions);
-router.post('/:id/versions/:versionId/restore', restoreVersion);
+router.get('/:id/versions', authorize('read'), getVersions);
+router.post('/:id/versions/:versionId/restore', authorize('update'), restoreVersion);
 
 // Ações
-router.post('/:id/duplicate', duplicateDocument);
-router.post('/:id/star', toggleStar);
+router.post('/:id/duplicate', authorize('read'), duplicateDocument);
+router.post('/:id/star', authorize('read'), toggleStar);
 
 export default router;

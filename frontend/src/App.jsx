@@ -6,6 +6,8 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Editor from './pages/Editor';
 import SharedDocument from './pages/SharedDocument';
+import TemplateGallery from './pages/TemplateGallery';
+import Analytics from './pages/Analytics';
 
 function PrivateRoute({ children }) {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
@@ -61,6 +63,22 @@ export default function App() {
             element={
               <PrivateRoute>
                 <Editor />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/templates"
+            element={
+              <PrivateRoute>
+                <TemplateGallery />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/analytics"
+            element={
+              <PrivateRoute>
+                <Analytics />
               </PrivateRoute>
             }
           />

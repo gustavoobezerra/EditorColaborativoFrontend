@@ -1,5 +1,6 @@
 import Document from '../models/Document.js';
 import User from '../models/User.js';
+import { triggerWebhook } from '../services/webhookService.js';
 
 // Criar documento
 export const createDocument = async (req, res) => {
@@ -14,6 +15,13 @@ export const createDocument = async (req, res) => {
       color: color || '#3B82F6',
       tags: tags || []
     });
+
+    // Trigger webhook
+    await triggerWebhook('document.created', {
+      documentId: document._id,
+      title: document.title,
+      owner: req.user.name
+    }, req.user._id);
 
     res.status(201).json({
       success: true,
@@ -165,6 +173,13 @@ export const updateDocument = async (req, res) => {
 
     await document.save();
 
+    // Trigger webhook
+    await triggerWebhook('document.updated', {
+      documentId: document._id,
+      title: document.title,
+      updatedBy: req.user.name
+    }, req.user._id);
+
     res.json({
       success: true,
       document
@@ -187,7 +202,16 @@ export const deleteDocument = async (req, res) => {
       return res.status(403).json({ message: 'Sem permissão' });
     }
 
+    const documentData = {
+      documentId: document._id,
+      title: document.title,
+      deletedBy: req.user.name
+    };
+
     await document.deleteOne();
+
+    // Trigger webhook
+    await triggerWebhook('document.deleted', documentData, req.user._id);
 
     res.json({
       success: true,

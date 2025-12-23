@@ -3,7 +3,7 @@ import {
   Layout, Menu, Share2, Cloud,
   ChevronLeft, FileText, Settings,
   Sparkles, Bot, X, Send, MoreHorizontal,
-  Home, PlusCircle
+  Home, PlusCircle, Download, Save
 } from 'lucide-react';
 
 /**
@@ -34,10 +34,13 @@ const SmartLayout = ({
   isAIPanelOpen = false,
   savingStatus = 'saved', // 'saving' | 'saved' | 'error'
   isDarkMode = false,
-  onToggleDarkMode
+  onToggleDarkMode,
+  onExport,
+  onSaveAsTemplate
 }) => {
   // Estados de UI locais (apenas para controles visuais)
   const [isSidebarOpen, setSidebarOpen] = useState(true);
+  const [showMoreMenu, setShowMoreMenu] = useState(false);
 
   return (
     <div className={`flex h-screen w-full transition-colors duration-300 overflow-hidden ${isDarkMode ? 'bg-slate-900 text-slate-200' : 'bg-slate-50 text-slate-800'}`}>
@@ -168,13 +171,51 @@ const SmartLayout = ({
               <Sparkles size={18} />
             </button>
 
-            <button
-              onClick={onToggleDarkMode}
-              className="p-1.5 rounded text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
-              title="Modo Escuro"
-            >
-              <MoreHorizontal size={18} />
-            </button>
+            <div className="relative">
+              <button
+                onClick={() => setShowMoreMenu(!showMoreMenu)}
+                className="p-1.5 rounded text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+                title="Mais opções"
+              >
+                <MoreHorizontal size={18} />
+              </button>
+
+              {/* Dropdown Menu */}
+              {showMoreMenu && (
+                <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-lg py-1 z-50">
+                  <button
+                    onClick={() => {
+                      onExport && onExport();
+                      setShowMoreMenu(false);
+                    }}
+                    className="w-full px-4 py-2 text-sm text-left hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-2"
+                  >
+                    <Download size={16} />
+                    Exportar
+                  </button>
+                  <button
+                    onClick={() => {
+                      onSaveAsTemplate && onSaveAsTemplate();
+                      setShowMoreMenu(false);
+                    }}
+                    className="w-full px-4 py-2 text-sm text-left hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-2"
+                  >
+                    <Save size={16} />
+                    Salvar como template
+                  </button>
+                  <div className="border-t border-slate-200 dark:border-slate-700 my-1"></div>
+                  <button
+                    onClick={() => {
+                      onToggleDarkMode && onToggleDarkMode();
+                      setShowMoreMenu(false);
+                    }}
+                    className="w-full px-4 py-2 text-sm text-left hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center gap-2"
+                  >
+                    {isDarkMode ? '☀️ Modo Claro' : '🌙 Modo Escuro'}
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </header>
 

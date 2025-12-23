@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   FileText, Plus, LogOut, Trash2, Search, Star, Users, Clock,
   MoreVertical, Copy, Share2, Archive, Grid, List, Moon, Sun,
-  FolderOpen, Filter, X
+  FolderOpen, Filter, X, Sparkles, BarChart3
 } from 'lucide-react';
 import {
   getDocuments, createDocument, deleteDocument,
@@ -226,6 +226,22 @@ export default function Dashboard() {
           >
             <Plus size={20} />
             Novo Documento
+          </button>
+
+          <button
+            onClick={() => navigate('/templates')}
+            className="flex items-center justify-center gap-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-medium shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 transition-all"
+          >
+            <Sparkles size={20} />
+            Templates
+          </button>
+
+          <button
+            onClick={() => navigate('/analytics')}
+            className="flex items-center justify-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl font-medium shadow-lg shadow-green-500/25 hover:shadow-green-500/40 transition-all"
+          >
+            <BarChart3 size={20} />
+            Analytics
           </button>
 
           <div className="flex-1 relative">
