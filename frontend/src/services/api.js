@@ -1,12 +1,32 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+// URL da API - usa variável de ambiente ou fallback para produção/desenvolvimento
+const getApiUrl = () => {
+  // Primeiro tenta variável de ambiente
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+  
+  // Em produção (Render), usa URL relativa ou URL do backend
+  if (import.meta.env.PROD) {
+    // Substitua pela URL real do seu backend no Render após o deploy
+    return 'https://smarteditor-backend.onrender.com';
+  }
+  
+  // Desenvolvimento local
+  return 'http://localhost:5000';
+};
+
+const API_URL = getApiUrl();
+
+console.log('🔗 API URL:', API_URL);
 
 const api = axios.create({
   baseURL: `${API_URL}/api`,
   headers: {
     'Content-Type': 'application/json'
-  }
+  },
+  withCredentials: true
 });
 
 // Adicionar token em todas as requisições
@@ -17,6 +37,22 @@ api.interceptors.request.use((config) => {
   }
   return config;
 });
+
+// Interceptor para tratar erros de autenticação
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      // Redireciona para login se não autenticado
+      if (window.location.pathname !== '/login') {
+        window.location.href = '/login';
+      }
+    }
+    return Promise.reject(error);
+  }
+);
 
 // Auth
 export const register = (data) => api.post('/auth/register', data);

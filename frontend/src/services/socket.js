@@ -1,6 +1,25 @@
 import { io } from 'socket.io-client';
 
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000';
+// URL do Socket - usa variável de ambiente ou fallback para produção/desenvolvimento
+const getSocketUrl = () => {
+  // Primeiro tenta variável de ambiente
+  if (import.meta.env.VITE_SOCKET_URL) {
+    return import.meta.env.VITE_SOCKET_URL;
+  }
+  
+  // Em produção (Render), usa URL do backend
+  if (import.meta.env.PROD) {
+    // Substitua pela URL real do seu backend no Render após o deploy
+    return 'https://smarteditor-backend.onrender.com';
+  }
+  
+  // Desenvolvimento local
+  return 'http://localhost:5000';
+};
+
+const SOCKET_URL = getSocketUrl();
+
+console.log('🔌 Socket URL:', SOCKET_URL);
 
 class SocketService {
   constructor() {
@@ -10,15 +29,24 @@ class SocketService {
   connect() {
     if (!this.socket) {
       this.socket = io(SOCKET_URL, {
-        autoConnect: true
+        autoConnect: true,
+        transports: ['websocket', 'polling'],
+        withCredentials: true,
+        reconnection: true,
+        reconnectionAttempts: 5,
+        reconnectionDelay: 1000
       });
 
       this.socket.on('connect', () => {
         console.log('✅ Conectado ao Socket.IO');
       });
 
-      this.socket.on('disconnect', () => {
-        console.log('❌ Desconectado do Socket.IO');
+      this.socket.on('disconnect', (reason) => {
+        console.log('❌ Desconectado do Socket.IO:', reason);
+      });
+
+      this.socket.on('connect_error', (error) => {
+        console.error('Socket connection error:', error.message);
       });
 
       this.socket.on('error', (error) => {
