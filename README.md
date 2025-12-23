@@ -1,339 +1,161 @@
 # 📝 Editor de Documentos Colaborativo em Tempo Real
 
-**Autor:** Gustavo de Oliveira Bezerra  
-**Data:** Dezembro 2025  
-**Stack:** MERN (MongoDB, Express, React, Node.js) + Socket.IO
+![Status](https://img.shields.io/badge/Status-Active-success)
+![Node](https://img.shields.io/badge/Node.js-v20+-green)
+![React](https://img.shields.io/badge/React-v18-blue)
+![Socket.IO](https://img.shields.io/badge/Socket.IO-Realtime-black)
 
-## 🎯 Visão Geral
+Um editor de texto moderno e colaborativo, permitindo que múltiplos usuários editem documentos simultaneamente com sincronização em tempo real. Desenvolvido com a stack MERN (MongoDB, Express, React, Node.js).
 
-Aplicação web full-stack que permite múltiplos usuários editarem documentos de texto simultaneamente em tempo real, similar ao Google Docs. Desenvolvido com arquitetura moderna utilizando WebSockets para sincronização instantânea.
+---
 
-## ⚡ Características Principais
+## ✨ Funcionalidades
 
-- ✅ **Edição Colaborativa em Tempo Real** com Socket.IO
-- ✅ **Rich Text Editor** com Quill.js (formatação, listas, cores, imagens)
-- ✅ **Autenticação JWT** segura
-- ✅ **Múltiplos usuários** editando simultaneamente
-- ✅ **Auto-save** a cada 2 segundos
-- ✅ **Indicadores de presença** (usuários online)
-- ✅ **Gerenciamento de documentos** (criar, editar, deletar)
-- ✅ **Interface responsiva** com TailwindCSS
+- **⏱️ Colaboração em Tempo Real:** Veja as alterações de outros usuários instantaneamente.
+- **🔐 Autenticação Segura:** Sistema completo de login e registro com JWT e bcrypt.
+- **📝 Editor Rich Text:** Suporte a formatação avançada (negrito, itálico, listas, imagens) com Quill.js.
+- **💾 Salvamento Automático:** Seus documentos são salvos automaticamente enquanto você digita.
+- **📱 Design Responsivo:** Interface limpa e adaptável construída com Tailwind CSS.
+- **👥 Presença Online:** Visualize quem está editando o documento no momento.
 
-## 🛠️ Tecnologias Utilizadas
-
-### Backend
-- **Node.js** - Runtime JavaScript
-- **Express.js** - Framework web
-- **Socket.IO** - Comunicação em tempo real (WebSockets)
-- **MongoDB** - Banco de dados NoSQL
-- **Mongoose** - ODM para MongoDB
-- **JWT** - Autenticação
-- **bcryptjs** - Hash de senhas
-
-### Frontend
-- **React 18** - UI Library
-- **Vite** - Build tool
-- **Zustand** - Gerenciamento de estado global
-- **React Router** - Roteamento
-- **Quill.js** - Rich text editor
-- **Socket.IO Client** - Cliente WebSocket
-- **TailwindCSS** - Estilização
-- **Axios** - Cliente HTTP
-
-## 📁 Estrutura do Projeto
-
-```
-collaborative-editor-complete/
-├── backend/
-│   ├── src/
-│   │   ├── config/
-│   │   │   └── database.js          # Configuração MongoDB
-│   │   ├── models/
-│   │   │   ├── User.js               # Modelo de usuário
-│   │   │   └── Document.js           # Modelo de documento
-│   │   ├── controllers/
-│   │   │   ├── authController.js     # Lógica de autenticação
-│   │   │   └── documentController.js # Lógica de documentos
-│   │   ├── middleware/
-│   │   │   └── auth.js               # Middleware JWT
-│   │   ├── routes/
-│   │   │   ├── authRoutes.js         # Rotas de auth
-│   │   │   └── documentRoutes.js     # Rotas de documentos
-│   │   ├── socket/
-│   │   │   └── documentSocket.js     # Handlers Socket.IO
-│   │   └── server.js                 # Entrada principal
-│   ├── package.json
-│   ├── .env.example
-│   └── Dockerfile
-├── frontend/
-│   ├── src/
-│   │   ├── components/               # Componentes reutilizáveis
-│   │   ├── pages/
-│   │   │   ├── Login.jsx             # Página de login
-│   │   │   ├── Register.jsx          # Página de registro
-│   │   │   ├── Dashboard.jsx         # Lista de documentos
-│   │   │   └── Editor.jsx            # Editor colaborativo
-│   │   ├── services/
-│   │   │   ├── api.js                # Cliente HTTP
-│   │   │   └── socket.js             # Cliente Socket.IO
-│   │   ├── store/
-│   │   │   └── index.js              # Zustand stores
-│   │   ├── App.jsx                   # Componente principal
-│   │   ├── main.jsx                  # Entry point
-│   │   └── index.css                 # Estilos globais
-│   ├── package.json
-│   ├── vite.config.js
-│   ├── tailwind.config.js
-│   └── Dockerfile
-├── docker-compose.yml
-├── .gitignore
-└── README.md
-```
+---
 
 ## 🚀 Como Executar
 
 ### Pré-requisitos
 
-- **Node.js** 20+ ([Download](https://nodejs.org/))
-- **MongoDB** 7+ ([Download](https://www.mongodb.com/try/download/community))
-- **Git** ([Download](https://git-scm.com/))
+- [Node.js](https://nodejs.org/) (v16 ou superior)
+- [MongoDB](https://www.mongodb.com/try/download/community) (Rodando localmente ou Atlas)
+- Git
 
-### Opção 1: Instalação Manual
+### ⚡ Início Rápido (Local)
 
-#### 1️⃣ Clone o Repositório
+1. **Clone o repositório:**
+   ```bash
+   git clone <url-do-repositorio>
+   cd collaborative-editor-complete
+   ```
 
-```bash
-git clone <seu-repo-url>
-cd collaborative-editor-complete
-```
+2. **Configure o Backend:**
+   ```bash
+   cd backend
+   npm install
+   cp .env.example .env
+   # Edite o .env se necessário (MongoDB URI, JWT Secret)
+   npm run dev
+   ```
+   > O servidor iniciará em `http://localhost:5000`
 
-#### 2️⃣ Configure o Backend
+3. **Configure o Frontend:**
+   Abra um novo terminal na raiz do projeto:
+   ```bash
+   cd frontend
+   npm install
+   npm run dev
+   ```
+   > A aplicação abrirá em `http://localhost:5173`
 
-```bash
-cd backend
+### 🐳 Executar com Docker
 
-# Instale as dependências
-npm install
-
-# Configure as variáveis de ambiente
-cp .env.example .env
-
-# Edite o arquivo .env e configure:
-# - MONGODB_URI (se MongoDB não estiver em localhost)
-# - JWT_SECRET (use uma string aleatória segura)
-
-# Inicie o servidor
-npm run dev
-```
-
-O backend estará rodando em `http://localhost:5000`
-
-#### 3️⃣ Configure o Frontend
-
-```bash
-# Em outro terminal
-cd ../frontend
-
-# Instale as dependências
-npm install
-
-# Configure variáveis de ambiente
-cp .env.example .env
-
-# Inicie o desenvolvimento
-npm run dev
-```
-
-O frontend estará rodando em `http://localhost:5173`
-
-### Opção 2: Docker Compose (Mais Fácil)
+Para uma configuração sem esforço, use o Docker Compose:
 
 ```bash
-# Na raiz do projeto
 docker-compose up --build
-
-# Para parar
-docker-compose down
 ```
-
-Acesse: `http://localhost:5173`
-
-## 📖 Como Usar
-
-### 1. Criar Conta
-- Acesse `http://localhost:5173/register`
-- Preencha nome, email e senha
-- Clique em "Criar Conta"
-
-### 2. Fazer Login
-- Acesse `http://localhost:5173/login`
-- Entre com suas credenciais
-
-### 3. Criar Documento
-- No dashboard, clique em "Novo Documento"
-- Você será redirecionado para o editor
-
-### 4. Editar Colaborativamente
-- Compartilhe a URL do documento
-- Outros usuários podem editar simultaneamente
-- Veja cursores e mudanças em tempo real
-
-### 5. Formatação de Texto
-- Use a toolbar para:
-  - Headers (H1, H2, H3)
-  - Negrito, itálico, sublinhado
-  - Listas ordenadas e não ordenadas
-  - Cores de texto e fundo
-  - Links e imagens
-
-## 🔧 API Endpoints
-
-### Autenticação
-
-```
-POST /api/auth/register
-Body: { name, email, password }
-Response: { user, token }
-
-POST /api/auth/login
-Body: { email, password }
-Response: { user, token }
-
-GET /api/auth/me
-Headers: Authorization: Bearer <token>
-Response: { user }
-```
-
-### Documentos
-
-```
-GET /api/documents
-Headers: Authorization: Bearer <token>
-Response: { documents: [] }
-
-POST /api/documents
-Headers: Authorization: Bearer <token>
-Body: { title }
-Response: { document }
-
-GET /api/documents/:id
-Headers: Authorization: Bearer <token>
-Response: { document }
-
-PUT /api/documents/:id
-Headers: Authorization: Bearer <token>
-Body: { title?, content? }
-Response: { document }
-
-DELETE /api/documents/:id
-Headers: Authorization: Bearer <token>
-Response: { message }
-```
-
-### Socket.IO Events
-
-#### Client → Server
-
-```javascript
-// Entrar em um documento
-socket.emit('join-document', { documentId, user });
-
-// Enviar mudanças
-socket.emit('send-changes', { documentId, delta });
-
-// Salvar documento
-socket.emit('save-document', { documentId, content });
-
-// Sair do documento
-socket.emit('leave-document', documentId);
-```
-
-#### Server → Client
-
-```javascript
-// Carregar documento
-socket.on('load-document', (content) => {});
-
-// Receber mudanças
-socket.on('receive-changes', (delta) => {});
-
-// Atualizar usuários
-socket.on('users-update', (users) => {});
-
-// Erros
-socket.on('error', (error) => {});
-```
-
-## 🎓 Conceitos Aprendidos
-
-Este projeto demonstra:
-
-1. **Arquitetura Cliente-Servidor** moderna
-2. **WebSockets** para comunicação bidirecional
-3. **Sincronização em Tempo Real** entre múltiplos clientes
-4. **Gerenciamento de Estado** com Zustand
-5. **Autenticação JWT** end-to-end
-6. **MongoDB** e modelagem de dados NoSQL
-7. **RESTful APIs** com Express
-8. **React Hooks** avançados (useEffect, useRef, useState)
-9. **Event-driven Architecture** com Socket.IO
-10. **Containerização** com Docker
-
-## 🐛 Troubleshooting
-
-### Erro de conexão MongoDB
-
-```bash
-# Verifique se MongoDB está rodando
-mongod --version
-
-# Inicie o MongoDB
-mongod
-
-# Ou use Docker
-docker run -d -p 27017:27017 mongo:7
-```
-
-### Erro CORS
-
-- Verifique se `CORS_ORIGIN` no backend .env está correto
-- Deve ser `http://localhost:5173` (sem trailing slash)
-
-### Socket não conecta
-
-- Verifique se backend está rodando na porta 5000
-- Verifique console do browser para erros
-- Confirme `VITE_SOCKET_URL` no frontend .env
-
-## 📝 Próximos Passos / Melhorias
-
-- [ ] Implementar cursor colaborativo (mostrar onde outros estão editando)
-- [ ] Sistema de comentários em linha
-- [ ] Histórico de versões (undo/redo distribuído)
-- [ ] Permissões granulares (owner, editor, viewer)
-- [ ] Exportar para PDF/DOCX
-- [ ] Busca em documentos
-- [ ] Tags e organização
-- [ ] Temas escuro/claro
-- [ ] Notificações em tempo real
-- [ ] Deploy em produção (Vercel + Railway/Render)
-
-## 📄 Licença
-
-MIT
-
-## 👨‍💻 Autor
-
-**Gustavo de Oliveira Bezerra**
-- GitHub: [seu-github]
-- LinkedIn: [seu-linkedin]
-- Email: [seu-email]
+Acesse a aplicação em `http://localhost:5173`.
 
 ---
 
-**Desenvolvido como projeto de portfólio demonstrando habilidades em:**
-- Backend com Node.js/Express
-- Frontend com React
-- Tempo Real com Socket.IO
-- Banco de Dados NoSQL
-- DevOps com Docker
+## 📖 Guia de Uso
+
+### Credenciais de Teste
+Para testar rapidamente sem criar uma conta, utilize o usuário pré-configurado:
+- **Email:** `gustavo@teste.com`
+- **Senha:** `senha123`
+
+### Comandos Úteis (Backend)
+Caso precise resetar ou configurar o banco de dados manualmente:
+
+- **Criar usuário de teste:**
+  ```bash
+  cd backend
+  npm run create-user
+  ```
+- **Criptografar senhas (migração):**
+  ```bash
+  cd backend
+  npm run hash-passwords
+  ```
+
+---
+
+## 🛠️ Tecnologias
+
+| Área | Tecnologias |
+|------|-------------|
+| **Frontend** | React, Vite, TailwindCSS, Zustand, Quill.js, Socket.IO Client |
+| **Backend** | Node.js, Express, Socket.IO, Mongoose, JWT, Bcrypt |
+| **Banco de Dados** | MongoDB |
+| **DevOps** | Docker, Docker Compose |
+
+---
+
+## 📂 Estrutura do Projeto
+
+```
+/
+├── backend/            # Servidor API e WebSocket
+│   ├── src/
+│   │   ├── config/     # Configuração de DB
+│   │   ├── controllers/# Lógica de negócios
+│   │   ├── models/     # Schemas do MongoDB
+│   │   ├── routes/     # Rotas da API
+│   │   ├── socket/     # Eventos do Socket.IO
+│   │   └── scripts/    # Scripts de utilidade
+├── frontend/           # Aplicação Cliente React
+│   ├── src/
+│   │   ├── components/ # Componentes UI
+│   │   ├── pages/      # Páginas da aplicação
+│   │   ├── services/   # Integração API/Socket
+│   │   └── store/      # Gerenciamento de estado (Zustand)
+└── docker-compose.yml  # Orquestração de containers
+```
+
+---
+
+## 🔌 API & Socket Reference
+
+### Endpoints Principais
+- `POST /api/auth/register` - Registrar novo usuário
+- `POST /api/auth/login` - Autenticar usuário
+- `GET /api/documents` - Listar documentos do usuário
+- `GET /api/documents/:id` - Obter detalhes de um documento
+
+### Eventos Socket.IO
+- `join-document` - Entra na sala de edição de um documento
+- `send-changes` - Envia delta de alterações do editor
+- `receive-changes` - Recebe alterações de outros clientes
+- `save-document` - Persiste o estado atual do documento
+
+---
+
+## ❓ Troubleshooting
+
+**Erro de Conexão com MongoDB:**
+- Verifique se a URI no arquivo `.backend/.env` está correta.
+- Se usar MongoDB Atlas, garanta que seu IP está na whitelist.
+- Certifique-se de que o serviço do MongoDB está rodando (`mongod`).
+
+**Problemas de Login:**
+- Se o login falhar, verifique se o usuário existe no banco.
+- Execute `npm run create-user` no backend para recriar o usuário de teste.
+- Verifique se o `JWT_SECRET` está configurado no `.env`.
+
+---
+
+## 📄 Licença
+
+Este projeto está sob a licença MIT.
+
+---
+**Autor:** Gustavo de Oliveira Bezerra
