@@ -1,6 +1,5 @@
 
 
-```markdown
 # 📝 CollabDocs - Editor Colaborativo Inteligente
 
 ![Status](https://img.shields.io/badge/Status-Production%20Ready-success?style=flat&logo=statuspage)
