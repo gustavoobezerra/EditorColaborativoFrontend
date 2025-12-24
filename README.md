@@ -1,175 +1,140 @@
-# 📝 CollabDocs - Editor Colaborativo de Próxima Geração
 
-![Status](https://img.shields.io/badge/Status-Production%20Ready-success)
-![Node](https://img.shields.io/badge/Node.js-v18+-green)
-![React](https://img.shields.io/badge/React-v18-blue)
-![Yjs](https://img.shields.io/badge/Yjs-CRDT-purple)
-![Socket.IO](https://img.shields.io/badge/Socket.IO-Realtime-black)
 
-Um editor de texto moderno e colaborativo de **alta performance**, permitindo edição **offline-first** com sincronização em tempo real sem conflitos. Desenvolvido para competir com Google Docs e Notion.
+```markdown
+# 📝 CollabDocs - Editor Colaborativo Inteligente
 
----
+![Status](https://img.shields.io/badge/Status-Production%20Ready-success?style=flat&logo=statuspage)
+![React](https://img.shields.io/badge/React-v18-blue?style=flat&logo=react)
+![Node](https://img.shields.io/badge/Node.js-v18+-green?style=flat&logo=nodedotjs)
+![Yjs](https://img.shields.io/badge/Yjs-Offline%20First-purple?style=flat)
+![AI](https://img.shields.io/badge/AI-Gemini%20Pro-orange?style=flat&logo=googlebard)
+![Docker](https://img.shields.io/badge/Docker-Enabled-2496ED?style=flat&logo=docker)
 
-## ✨ Funcionalidades
-
-### 🔥 Melhorias Estratégicas Implementadas
-
-- **🌐 Modo Offline Inteligente (CRDT):** Edite documentos sem internet e sincronize automaticamente ao reconectar, **zero conflitos** garantido por Yjs
-- **⚡ Performance Ultra-Rápida:** Debouncing, lazy loading e virtualização para experiência fluida mesmo com documentos grandes
-- **🔐 Autenticação Segura:** Sistema completo de login e registro com JWT e bcrypt
-- **📝 Editor Rich Text:** Suporte a formatação avançada (negrito, itálico, listas, imagens) com Quill.js
-- **💾 Salvamento Automático:** IndexedDB persiste mudanças localmente + sync em background
-- **📱 Design Responsivo:** Interface limpa e adaptável com Tailwind CSS + Dark Mode
-- **👥 Presença Online:** Visualize quem está editando em tempo real com cursor awareness
-- **🚀 Infraestrutura Escalável:** Hooks reutilizáveis e componentes otimizados
+> Um editor de texto de próxima geração, focado em colaboração em tempo real, suporte offline robusto e assistência de Inteligência Artificial generativa.
 
 ---
 
-## 🚀 Como Executar
+## 🔗 Links do Projeto
+
+| 🚀 **Aplicação Online** | 👨‍💻 **Desenvolvedor** |
+|:-------------------:|:-------------------:|
+| [**Acessar CollabDocs**](https://smarteditor-frontend.onrender.com) | [**Gustavo Bezerra**](https://www.linkedin.com/in/gustavo-bezerradev/) |
+
+---
+
+## 💡 Sobre o Projeto
+
+O **CollabDocs** é uma solução de edição de texto colaborativa projetada para superar as limitações de editores web tradicionais. Sua arquitetura **Offline-First**, baseada em CRDTs (Conflict-free Replicated Data Types), permite que os usuários continuem editando mesmo sem conexão com a internet. Assim que a conexão é restabelecida, o sistema sincroniza automaticamente todas as alterações sem conflitos de versão.
+
+Além da colaboração em tempo real, o sistema integra a API do **Google Gemini**, transformando o editor em uma ferramenta de escrita assistida por IA capaz de reescrever textos, gerar resumos e oferecer autocompletar inteligente.
+
+---
+
+## 🛠️ Stack Tecnológica
+
+O projeto utiliza uma arquitetura moderna e escalável, dividida entre cliente e servidor:
+
+### **Frontend (Client)**
+* **Core:** [React 18](https://react.dev/) + [Vite](https://vitejs.dev/) para alta performance.
+* **Estado:** [Zustand](https://github.com/pmndrs/zustand) para gerenciamento de estado global leve.
+* **Editor:** [Quill.js](https://quilljs.com/) customizado com suporte a Rich Text.
+* **Sincronização & Offline:** [Yjs](https://yjs.dev/) integrado com IndexedDB e WebSockets para garantir consistência de dados e colaboração P2P.
+* **Estilização:** [Tailwind CSS](https://tailwindcss.com/) com suporte nativo a Dark Mode e design responsivo.
+
+### **Backend (Server)**
+* **API:** [Node.js](https://nodejs.org/) & [Express](https://expressjs.com/).
+* **Real-time:** [Socket.IO](https://socket.io/) para gerenciamento de salas, presença e cursores.
+* **Database:** [MongoDB](https://www.mongodb.com/) (com Mongoose) para persistência de documentos, usuários e logs.
+* **Segurança:** Autenticação via JWT (JSON Web Tokens) e hash de senhas com Bcrypt.
+* **AI:** Integração direta com Google Gemini API para processamento de linguagem natural.
+
+### **DevOps & Infraestrutura**
+* **Deploy:** Render (Web Services).
+* **Containerização:** Docker e Docker Compose para orquestração de ambientes.
+
+---
+
+## ✨ Funcionalidades Principais
+
+### 🔄 Colaboração Avançada
+* **Edição Simultânea:** Múltiplos usuários no mesmo documento com latência mínima.
+* **Cursor Awareness:** Visualização em tempo real da posição e seleção de texto de outros colaboradores.
+* **Sincronização Resiliente:** Algoritmo CRDT garante que dados nunca sejam perdidos, independente da estabilidade da rede.
+
+### 🤖 Inteligência Artificial (Magic Editor)
+* **Magic Toolbar:** Ferramenta contextual para resumir, traduzir ou melhorar a escrita de trechos selecionados.
+* **Ghost Text:** Sugestões de autocompletar estilo "Copilot" enquanto você digita.
+* **Chat Contextual:** Painel lateral para discutir ideias e gerar conteúdo baseado no documento atual.
+
+### 📊 Gestão e Produtividade
+* **Dashboard Completo:** Criação, exclusão, favoritos e duplicação de documentos.
+* **Analytics:** Rastreamento de palavras escritas, tempo de edição e "heatmaps" de produtividade.
+* **Exportação:** Suporte nativo para PDF, DOCX, Markdown e HTML.
+* **Templates:** Galeria de modelos reutilizáveis para agilizar a criação de documentos.
+
+---
+
+## 🚀 Executando Localmente
+
+Siga os passos abaixo para rodar o projeto em sua máquina:
 
 ### Pré-requisitos
+* Node.js (v18+)
+* MongoDB (Local ou Atlas URI)
+* Git
 
-- [Node.js](https://nodejs.org/) (v16 ou superior)
-- [MongoDB](https://www.mongodb.com/try/download/community) (Rodando localmente ou Atlas)
-- Git
+### 1. Clonar o Repositório
+```bash
+git clone [https://github.com/gustavoobezerra/editorcolaborativofrontend.git](https://github.com/gustavoobezerra/editorcolaborativofrontend.git)
+cd editorcolaborativofrontend
 
-### ⚡ Início Rápido (Local)
+```
 
-1. **Clone o repositório:**
-   ```bash
-   git clone <url-do-repositorio>
-   cd collaborative-editor-complete
-   ```
+### 2. Configurar e Rodar o Backend
 
-2. **Configure o Backend:**
-   ```bash
-   cd backend
-   npm install
-   cp .env.example .env
-   # Edite o .env se necessário (MongoDB URI, JWT Secret)
-   npm run dev
-   ```
-   > O servidor iniciará em `http://localhost:5000`
+```bash
+cd backend
+npm install
 
-3. **Configure o Frontend:**
-   Abra um novo terminal na raiz do projeto:
-   ```bash
-   cd frontend
-   npm install
-   npm run dev
-   ```
-   > A aplicação abrirá em `http://localhost:5173`
+# Crie um arquivo .env na pasta backend com as variáveis:
+# MONGODB_URI=sua_string_conexao
+# JWT_SECRET=seu_segredo_super_seguro
+# GEMINI_API_KEY=sua_api_key_google (opcional para IA)
 
-### 🐳 Executar com Docker
+npm run dev
 
-Para uma configuração sem esforço, use o Docker Compose:
+```
+
+### 3. Configurar e Rodar o Frontend
+
+Em um novo terminal:
+
+```bash
+cd frontend
+npm install
+npm run dev
+
+```
+
+Acesse a aplicação em: `http://localhost:5173`
+
+---
+
+## 🐳 Executando com Docker
+
+Se preferir, você pode subir todo o ambiente (Frontend + Backend + Banco de Dados) com um único comando:
 
 ```bash
 docker-compose up --build
-```
-Acesse a aplicação em `http://localhost:5173`.
-
----
-
-## 📖 Guia de Uso
-
-### Credenciais de Teste
-Para testar rapidamente sem criar uma conta, utilize o usuário pré-configurado:
-- **Email:** `gustavo@teste.com`
-- **Senha:** `senha123`
-
-### Comandos Úteis (Backend)
-Caso precise resetar ou configurar o banco de dados manualmente:
-
-- **Criar usuário de teste:**
-  ```bash
-  cd backend
-  npm run create-user
-  ```
-- **Criptografar senhas (migração):**
-  ```bash
-  cd backend
-  npm run hash-passwords
-  ```
-
----
-
-## 🛠️ Tecnologias
-
-| Área | Tecnologias |
-|------|-------------|
-| **Frontend** | React 18, Vite, TailwindCSS, Zustand, Quill.js 1.3.7, **Yjs (CRDT)**, Socket.IO Client |
-| **Offline Sync** | **y-indexeddb**, **y-websocket**, **y-protocols**, **quill-cursors** |
-| **Performance** | **@tanstack/react-virtual**, **lodash.debounce**, IntersectionObserver API |
-| **Backend** | Node.js, Express, Socket.IO, Mongoose, JWT, Bcrypt |
-| **Banco de Dados** | MongoDB (com índices full-text) |
-| **DevOps** | Docker, Docker Compose |
-| **IA (Opcional)** | Google Gemini API
-
----
-
-## 📂 Estrutura do Projeto
 
 ```
-/
-├── backend/            # Servidor API e WebSocket
-│   ├── src/
-│   │   ├── config/     # Configuração de DB
-│   │   ├── controllers/# Lógica de negócios
-│   │   ├── models/     # Schemas do MongoDB
-│   │   ├── routes/     # Rotas da API
-│   │   ├── socket/     # Eventos do Socket.IO
-│   │   └── scripts/    # Scripts de utilidade
-├── frontend/           # Aplicação Cliente React
-│   ├── src/
-│   │   ├── components/ # Componentes UI
-│   │   │   ├── OfflineStatusIndicator.jsx ✨ NOVO
-│   │   │   └── LazyImage.jsx ✨ NOVO
-│   │   ├── hooks/      # Custom Hooks ✨ NOVO
-│   │   │   ├── useDebounce.js
-│   │   │   └── useIntersectionObserver.js
-│   │   ├── pages/      # Páginas da aplicação
-│   │   ├── services/   # Integração API/Socket
-│   │   │   └── offlineSync.js ✨ NOVO (Yjs CRDT)
-│   │   └── store/      # Gerenciamento de estado (Zustand)
-├── IMPLEMENTATION_ROADMAP.md ✨ Guia das 8 melhorias restantes
-├── IMPROVEMENTS_SUMMARY.md ✨ Resumo técnico das melhorias
-├── QUICK_START_GUIDE.md ✨ Guia de testes e uso
-└── docker-compose.yml  # Orquestração de containers
+
+---
+
+## 📬 Contato
+
+Projeto desenvolvido por **Gustavo Bezerra**.
+
 ```
 
----
-
-## 🔌 API & Socket Reference
-
-### Endpoints Principais
-- `POST /api/auth/register` - Registrar novo usuário
-- `POST /api/auth/login` - Autenticar usuário
-- `GET /api/documents` - Listar documentos do usuário
-- `GET /api/documents/:id` - Obter detalhes de um documento
-
-### Eventos Socket.IO
-- `join-document` - Entra na sala de edição de um documento
-- `send-changes` - Envia delta de alterações do editor
-- `receive-changes` - Recebe alterações de outros clientes
-- `save-document` - Persiste o estado atual do documento
-
----
-
-
-
----
-
-## 📄 Licença
-
-Este projeto está sob a licença MIT.
-
----
-
-## 👥 Autores
-
-**Desenvolvimento Original:** Gustavo de Oliveira Bezerra
-
-
-**Versão:** 2.0 (com Offline Sync + Performance)
-**Última Atualização:** 2025-12-23
+```
