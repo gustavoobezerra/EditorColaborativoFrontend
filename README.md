@@ -1,139 +1,116 @@
+# ⚡ CollabDocs - Real-Time Collaborative Editor
 
-
-# 📝 CollabDocs - Editor Colaborativo Inteligente
-
-![Status](https://img.shields.io/badge/Status-Production%20Ready-success?style=flat&logo=statuspage)
+![Status](https://img.shields.io/badge/Status-Online-success?style=flat&logo=statuspage)
+![Socket.IO](https://img.shields.io/badge/Socket.io-Real--Time-black?style=flat&logo=socket.io)
+![Yjs](https://img.shields.io/badge/Algorithm-CRDT-purple?style=flat)
 ![React](https://img.shields.io/badge/React-v18-blue?style=flat&logo=react)
-![Node](https://img.shields.io/badge/Node.js-v18+-green?style=flat&logo=nodedotjs)
-![Yjs](https://img.shields.io/badge/Yjs-Offline%20First-purple?style=flat)
+![Node](https://img.shields.io/badge/Backend-Node.js-green?style=flat&logo=nodedotjs)
 ![AI](https://img.shields.io/badge/AI-Gemini%20Pro-orange?style=flat&logo=googlebard)
-![Docker](https://img.shields.io/badge/Docker-Enabled-2496ED?style=flat&logo=docker)
 
-> Um editor de texto de próxima geração, focado em colaboração em tempo real, suporte offline robusto e assistência de Inteligência Artificial generativa.
+> Um editor de texto colaborativo de alta performance, projetado para oferecer sincronização instantânea entre múltiplos usuários e assistência de inteligência artificial.
 
 ---
 
-## 🔗 Links do Projeto
+## 🔗 Acesso Rápido
 
-| 🚀 **Aplicação Online** | 👨‍💻 **Desenvolvedor** |
+| 🚀 **Aplicação Live** | 👨‍💻 **Meu LinkedIn** |
 |:-------------------:|:-------------------:|
 | [**Acessar CollabDocs**](https://smarteditor-frontend.onrender.com) | [**Gustavo Bezerra**](https://www.linkedin.com/in/gustavo-bezerradev/) |
 
 ---
 
-## 💡 Sobre o Projeto
+## 🎯 O Desafio Técnico
 
-O **CollabDocs** é uma solução de edição de texto colaborativa projetada para superar as limitações de editores web tradicionais. Sua arquitetura **Offline-First**, baseada em CRDTs (Conflict-free Replicated Data Types), permite que os usuários continuem editando mesmo sem conexão com a internet. Assim que a conexão é restabelecida, o sistema sincroniza automaticamente todas as alterações sem conflitos de versão.
+O objetivo central deste projeto foi resolver um dos problemas mais complexos do desenvolvimento web moderno: **Gerenciamento de Estado Distribuído em Tempo Real**.
 
-Além da colaboração em tempo real, o sistema integra a API do **Google Gemini**, transformando o editor em uma ferramenta de escrita assistida por IA capaz de reescrever textos, gerar resumos e oferecer autocompletar inteligente.
+Diferente de um CRUD tradicional, o CollabDocs precisa lidar com condições de corrida onde múltiplos usuários alteram o mesmo estado (documento) simultaneamente. A solução foi construída sobre três pilares:
+
+1.  **Baixa Latência:** Uso de WebSockets para transmissão de dados em milissegundos.
+2.  **Resolução de Conflitos:** Implementação de CRDTs (Conflict-free Replicated Data Types) para garantir que as edições de todos os usuários sejam fundidas (merge) sem sobrescrever dados.
+3.  **Presença:** Monitoramento em tempo real de quem está online e onde está o cursor de cada usuário.
 
 ---
 
-## 🛠️ Stack Tecnológica
+## 🛠️ Tecnologias e Arquitetura
 
-O projeto utiliza uma arquitetura moderna e escalável, dividida entre cliente e servidor:
+A aplicação segue uma arquitetura moderna baseada em eventos.
 
 ### **Frontend (Client)**
-* **Core:** [React 18](https://react.dev/) + [Vite](https://vitejs.dev/) para alta performance.
-* **Estado:** [Zustand](https://github.com/pmndrs/zustand) para gerenciamento de estado global leve.
-* **Editor:** [Quill.js](https://quilljs.com/) customizado com suporte a Rich Text.
-* **Sincronização & Offline:** [Yjs](https://yjs.dev/) integrado com IndexedDB e WebSockets para garantir consistência de dados e colaboração P2P.
-* **Estilização:** [Tailwind CSS](https://tailwindcss.com/) com suporte nativo a Dark Mode e design responsivo.
+* **React 18 + Vite:** Renderização otimizada e *build* rápido.
+* **Socket.IO Client:** Gerenciamento da conexão persistente com o servidor.
+* **Yjs + Quill Binding:** O coração da colaboração. O Yjs intercepta as mudanças no editor Quill e as propaga via rede, garantindo consistência matemática dos dados.
+* **Zustand:** Gerenciamento de estado global (sessão do usuário, preferências).
+* **Tailwind CSS:** Design system responsivo e moderno.
 
 ### **Backend (Server)**
-* **API:** [Node.js](https://nodejs.org/) & [Express](https://expressjs.com/).
-* **Real-time:** [Socket.IO](https://socket.io/) para gerenciamento de salas, presença e cursores.
-* **Database:** [MongoDB](https://www.mongodb.com/) (com Mongoose) para persistência de documentos, usuários e logs.
-* **Segurança:** Autenticação via JWT (JSON Web Tokens) e hash de senhas com Bcrypt.
-* **AI:** Integração direta com Google Gemini API para processamento de linguagem natural.
+* **Node.js & Express:** API REST para autenticação e gestão de recursos.
+* **Socket.IO Server:** * Gerenciamento de "Rooms" (cada documento é uma sala).
+    * Broadcast de eventos de cursor e edição.
+* **MongoDB + Mongoose:** Persistência de dados (documentos, usuários e logs).
+* **Google Gemini API:** Integração server-side para processamento de linguagem natural (IA).
 
-### **DevOps & Infraestrutura**
-* **Deploy:** Render (Web Services).
-* **Containerização:** Docker e Docker Compose para orquestração de ambientes.
+### **DevOps**
+* **Docker & Docker Compose:** Containerização completa do ambiente.
+* **Render:** Plataforma de orquestração e deploy.
 
 ---
 
 ## ✨ Funcionalidades Principais
 
-### 🔄 Colaboração Avançada
-* **Edição Simultânea:** Múltiplos usuários no mesmo documento com latência mínima.
-* **Cursor Awareness:** Visualização em tempo real da posição e seleção de texto de outros colaboradores.
-* **Sincronização Resiliente:** Algoritmo CRDT garante que dados nunca sejam perdidos, independente da estabilidade da rede.
+### 🔄 Colaboração em Tempo Real (Live)
+* **Multi-usuário:** Várias pessoas editando o mesmo documento simultaneamente.
+* **Live Cursors:** Veja exatamente onde outros usuários estão clicando ou selecionando texto, com identificação por cores e nomes.
+* **Atualização Instantânea:** As mudanças aparecem na tela de todos os participantes em milissegundos.
 
-### 🤖 Inteligência Artificial (Magic Editor)
-* **Magic Toolbar:** Ferramenta contextual para resumir, traduzir ou melhorar a escrita de trechos selecionados.
-* **Ghost Text:** Sugestões de autocompletar estilo "Copilot" enquanto você digita.
-* **Chat Contextual:** Painel lateral para discutir ideias e gerar conteúdo baseado no documento atual.
+### 🤖 Inteligência Artificial (AI Powered)
+* **Magic Editor:** Selecione um texto e peça para a IA reescrever, corrigir gramática ou alterar o tom.
+* **Context Chat:** Chat lateral que "lê" o seu documento e responde perguntas sobre ele.
+* **Ghost Text:** Sugestões de autocompletar enquanto você digita.
 
-### 📊 Gestão e Produtividade
-* **Dashboard Completo:** Criação, exclusão, favoritos e duplicação de documentos.
-* **Analytics:** Rastreamento de palavras escritas, tempo de edição e "heatmaps" de produtividade.
-* **Exportação:** Suporte nativo para PDF, DOCX, Markdown e HTML.
-* **Templates:** Galeria de modelos reutilizáveis para agilizar a criação de documentos.
+### 📊 Produtividade
+* **Analytics:** Métricas de tempo de escrita e volume de palavras.
+* **Templates:** Criação rápida de documentos baseada em modelos.
+* **Exportação:** PDF, DOCX e Markdown.
 
 ---
 
-## 🚀 Executando Localmente
-
-Siga os passos abaixo para rodar o projeto em sua máquina:
+## 🚀 Como Executar Localmente
 
 ### Pré-requisitos
-* Node.js (v18+)
-* MongoDB (Local ou Atlas URI)
+* Node.js v18+
+* MongoDB
 * Git
 
-### 1. Clonar o Repositório
-```bash
-git clone [https://github.com/gustavoobezerra/editorcolaborativofrontend.git](https://github.com/gustavoobezerra/editorcolaborativofrontend.git)
-cd editorcolaborativofrontend
+### Instalação
 
-```
+1.  **Clone o repositório:**
+    ```bash
+    git clone [https://github.com/gustavoobezerra/editorcolaborativofrontend.git](https://github.com/gustavoobezerra/editorcolaborativofrontend.git)
+    cd editorcolaborativofrontend
+    ```
 
-### 2. Configurar e Rodar o Backend
+2.  **Backend (Servidor & WebSocket):**
+    ```bash
+    cd backend
+    npm install
+    # Crie um arquivo .env com suas credenciais (veja .env.example)
+    npm run dev
+    ```
 
-```bash
-cd backend
-npm install
+3.  **Frontend (Interface):**
+    ```bash
+    cd frontend
+    npm install
+    npm run dev
+    ```
 
-# Crie um arquivo .env na pasta backend com as variáveis:
-# MONGODB_URI=sua_string_conexao
-# JWT_SECRET=seu_segredo_super_seguro
-# GEMINI_API_KEY=sua_api_key_google (opcional para IA)
-
-npm run dev
-
-```
-
-### 3. Configurar e Rodar o Frontend
-
-Em um novo terminal:
-
-```bash
-cd frontend
-npm install
-npm run dev
-
-```
-
-Acesse a aplicação em: `http://localhost:5173`
+4.  **Acesse:** `http://localhost:5173`
 
 ---
 
-## 🐳 Executando com Docker
+## 🐳 Docker (Recomendado)
 
-Se preferir, você pode subir todo o ambiente (Frontend + Backend + Banco de Dados) com um único comando:
+Para subir toda a infraestrutura (App + Banco de Dados) com um comando:
 
 ```bash
 docker-compose up --build
-
-```
-
----
-
-## 📬 Contato
-
-Projeto desenvolvido por **Gustavo Bezerra**.
-
-```
-gustavodeobezerra@gmail.com
-```
