@@ -89,7 +89,17 @@ export default function Editor() {
     q.setText('Carregando...');
     setQuill(q);
 
+    // Timeout de segurança: habilita o editor após 5 segundos se nada acontecer
+    const emergencyEnableTimer = setTimeout(() => {
+      if (q && q.isEnabled && !q.isEnabled()) {
+        console.log('🚨 EMERGENCY: Habilitando editor após timeout de segurança');
+        q.setText('');
+        q.enable();
+      }
+    }, 5000);
+
     return () => {
+      clearTimeout(emergencyEnableTimer);
       if (q) {
         q.off('text-change');
       }
@@ -101,6 +111,7 @@ export default function Editor() {
     if (!quill || !user) return;
 
     const wsUrl = import.meta.env.VITE_SOCKET_URL || 'ws://localhost:5000';
+    let cleanup = null;
 
     // Initialize offline sync service
     const initOfflineSync = async () => {
@@ -110,19 +121,24 @@ export default function Editor() {
           setOfflineStatus(status);
         });
 
-        // Initialize Yjs with Quill
-        await offlineSyncService.initialize(id, quill, user, wsUrl);
+        // Initialize Yjs with Quill (with timeout protection)
+        const initPromise = offlineSyncService.initialize(id, quill, user, wsUrl);
+        const timeoutPromise = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('Yjs initialization timeout')), 5000)
+        );
+
+        await Promise.race([initPromise, timeoutPromise]);
 
         console.log('✅ Offline sync initialized with Yjs');
 
-        return () => {
+        cleanup = () => {
           unsubscribe();
           offlineSyncService.destroy();
         };
       } catch (error) {
         console.error('❌ Failed to initialize offline sync:', error);
         // Fallback to standard socket sync if Yjs fails
-        initSocketSync();
+        cleanup = initSocketSync();
       }
     };
 
@@ -147,14 +163,13 @@ export default function Editor() {
         setActiveUsers(users);
       });
 
-      // Fallback timer
+      // Fallback timer - sempre habilita o editor após 2 segundos
       const fallbackTimer = setTimeout(() => {
         if (!documentLoaded && quill) {
-          console.log('Fallback: Enabling editor without socket');
-          quill.setText('');
+          console.log('⚡ Fallback: Enabling editor without socket');
           quill.enable();
         }
-      }, 3000);
+      }, 2000);
 
       return () => {
         clearTimeout(fallbackTimer);
@@ -165,15 +180,15 @@ export default function Editor() {
       };
     };
 
-    // Carregar dados do documento via API
+    // Carregar dados do documento via API primeiro
     loadDocumentData();
 
     // Try offline sync first, with socket fallback
-    const cleanup = initOfflineSync();
+    initOfflineSync();
 
     return () => {
-      if (cleanup && typeof cleanup.then === 'function') {
-        cleanup.then(fn => fn && fn());
+      if (cleanup && typeof cleanup === 'function') {
+        cleanup();
       }
     };
   }, [quill, user, id]);
@@ -224,9 +239,13 @@ export default function Editor() {
       setCurrentDocument(doc);
 
       // Se tem conteúdo, carrega no editor
-      if (doc.content && quill) {
-        quill.setContents(doc.content);
+      if (quill) {
+        if (doc.content) {
+          quill.setContents(doc.content);
+        }
+        // SEMPRE habilita o editor após carregar os dados
         quill.enable();
+        console.log('✅ Editor habilitado com conteúdo do documento');
       }
 
       if (doc.shareLinkEnabled && doc.shareLink) {
@@ -239,6 +258,7 @@ export default function Editor() {
       if (quill) {
         quill.setText('');
         quill.enable();
+        console.log('⚡ Editor habilitado após erro no carregamento');
       }
 
       // Só navega se for erro de autenticação
