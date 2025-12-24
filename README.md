@@ -135,5 +135,5 @@ docker-compose up --build
 Projeto desenvolvido por **Gustavo Bezerra**.
 
 ```
-
+gustavodeobezerra@gmail.com
 ```
